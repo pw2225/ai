@@ -1,11 +1,271 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>東吳大學導覽介紹</title>
+    <style>
+        /* 全域樣式優化 */
+        body {
+            font-family: "Microsoft JhengHei", sans-serif;
+            background-color: #fcfaf2; 
+            color: #333;
+            margin: 20px;
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #d32f2f;
+            padding-bottom: 10px;
+        }
+
+        .logo { margin-right: 15px; }
+
+        .main-container {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+        /* 左側選單：增加陰影與捲軸美化 */
+        .sidebar {
+            width: 260px;
+            background-color: white;
+            border: 2px solid #333;
+        }
+
+        .sidebar-title {
+            background-color: #d32f2f;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .sidebar ol {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            max-height: 550px;
+            overflow-y: auto;
+        }
+
+        .sidebar li {
+            padding: 12px 20px;
+            border-bottom: 1px solid #333;
+            background-color: beige;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            transition: 0.2s;
+        }
+
+        .sidebar li::before {
+            content: "•";
+            margin-right: 10px;
+            color: #d32f2f;
+            font-weight: bold;
+        }
+        .sidebar li:hover {  
+            background-color: #f0f0e0;
+            padding-left: 30px;
+            color: #d32f2f;
+        }
+
+        /* 右側主內容區 */
+        .content-area { flex: 1; }
+
+        .path-bar {
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        /* 圖片容器：設定垂直排列與捲軸 */
+        .image-display { 
+            background-color: white;
+            border: 2px solid #333;
+            padding: 20px;   
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 600px;
+            overflow-y: auto;
+            gap: 30px; 
+        }
+
+        .img-wrapper {
+            text-align: center;
+            width: 100%;
+        }
+
+        .image-display img {
+            max-width: 100%;
+            max-height: 600px;
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+        }
+
+        .img-caption {
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: #333;
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 <body>
-    
+
+    <header>
+        <img src="logo.png" width="60" height="60" class="logo" alt="東吳校徽">
+        <h1>東吳大學校園導覽</h1>
+    </header>
+
+    <div class="main-container">
+        <nav class="sidebar">
+            <div class="sidebar-title">大樓介紹選單項目</div>
+            <ol id="building-menu">
+                <li>A 棟</li><li>B 棟</li><li>C 棟</li><li>D 棟</li><li>E 棟</li>
+                <li>F 棟</li><li>G 棟</li><li>H 棟</li><li>I 棟</li><li>K 棟</li>
+                <li>L 棟</li><li>M 棟</li><li>N 棟</li><li>P 棟</li><li>Q 棟</li>
+                <li>R 棟</li><li>操場</li>
+            </ol>
+        </nav>
+
+        <main class="content-area">
+            <div class="path-bar" id="current-building">東吳大學地圖</div>
+            <div class="image-display" id="image-container">
+                </div>
+        </main>
+    </div>
+
+    <script>
+        const menuItems = document.querySelectorAll('#building-menu li');
+        const container = document.getElementById('image-container'); //
+        const titleBar = document.getElementById('current-building');
+
+        // 合併後的圖片與文字產生函式
+        function addImage(src, text) {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'img-wrapper';
+
+            const img = document.createElement('img');
+            img.src = src;
+            img.alt = text;
+            img.onerror = function() { this.style.display='none'; };
+
+            const caption = document.createElement('div');
+            caption.className = 'img-caption';
+            caption.innerText = text;
+
+            wrapper.appendChild(img);
+            wrapper.appendChild(caption);
+            container.appendChild(wrapper);
+        }
+
+        menuItems.forEach(item => {
+            item.addEventListener('click', function() {
+                const name = this.innerText.trim().replace(/\s+/g, '');
+                titleBar.innerText = "東吳大學 - " + name;
+
+                // 點擊後清空舊內容
+                container.innerHTML = "";
+
+                // 根據選單名稱加入圖片與文字描述
+                if (name === "H棟") {
+                    addImage("H/801.jpg", "哲生樓 - 1F 平面圖");
+                    addImage("H/802.jpg", "哲生樓 - 2F 平面圖");
+                    addImage("H/803.jpg", "哲生樓 - 3F 平面圖");
+                    addImage("H/804.jpg", "哲生樓 - 4F 平面圖");} 
+
+                else if (name === "A棟") {
+                    addImage("A1.jpg", "寵惠堂 - 1F 平面圖"); 
+                    addImage("A2.jpg", "寵惠堂 - 2F 平面圖");
+                    addImage("A3.jpg", "寵惠堂 - 3F 平面圖");}
+
+                 else if (name === "B棟") {
+                    addImage("B8.jpg", "綜合大樓 - B1 平面圖");
+                    addImage("B1.jpg", "綜合大樓 - 1F 平面圖");
+                    addImage("B2.jpg", "綜合大樓 - 2F 平面圖");
+                    addImage("B3.jpg", "綜合大樓 - 3F 平面圖");
+                    addImage("B4.jpg", "綜合大樓 - 4F 平面圖");
+                    addImage("B5.jpg", "綜合大樓 - 5F 平面圖");
+                    addImage("B6.jpg", "綜合大樓 - 6F 平面圖");
+                    addImage("B7.jpg", "綜合大樓 - 7F 平面圖");}
+
+                else if (name === "C棟") {
+                    addImage( "", "愛徒樓\n安素堂採購保管組、校牧室、社團辦公室及活動空間、C103議價");}
+
+                else if (name === "D棟") {
+                    addImage( "D1.jpg", "第二教學研究大樓 音樂廳(松怡廳) - 1F平面圖");
+                addImage( "D2.jpg", "第二教學研究大樓 音樂廳(松怡廳) - 2F平面圖");
+                addImage( "D3.jpg", "第二教學研究大樓 音樂廳(松怡廳) - 3F平面圖");
+                addImage( "D4.jpg", "第二教學研究大樓 音樂廳(松怡廳) - 4F平面圖");
+                addImage( "D5.jpg", "第二教學研究大樓 音樂廳(松怡廳) - 5F平面圖");
+                addImage( "D6.jpg", "第二教學研究大樓 音樂廳(松怡廳) - 6F平面圖");
+                addImage( "D7.jpg", "第二教學研究大樓 音樂廳(松怡廳) - 7F平面圖");
+                addImage( "D8.jpg", "第二教學研究大樓 音樂廳(松怡廳) - 8F平面圖");
+                addImage( "D9.jpg", "第二教學研究大樓 音樂廳(松怡廳) - 9F平面圖");
+                addImage( "D10.jpg", "第二教學研究大樓 音樂廳(松怡廳) - 10F平面圖");  }
+
+
+                else if (name === "E棟") {
+                    addImage("", "汽機車停車場");}
+
+                
+                else if (name === "F棟") {
+                    addImage("", "文化樓 \n 微生物學系、心理學系(教師研究室)、檢驗研究中心行政辦公室、環境安全衛生暨事務管理組、營繕組、F103議價室");}
+
+                
+                else if (name === "G棟") {
+                    addImage(".jpg", "戴蓀堂語言教學中心、註冊課務組、G101會議室");}
+                
+                else if (name === "I棟") {
+                    addImage(".jpg", "光道廳創新教育發展中心、化學實驗室、教師研究室");}
+                
+                else if (name === "K棟") {
+                    addImage("Q.jpg", "心理學系電腦教室、心理學系實驗室");}
+                
+                else if (name === "L棟") {
+                    addImage("L1.jpg", "心理學系、教師研究室");}
+                else if (name === "M棟") {
+                    addImage("Q.jpg", "化學系、微生物學系、檢驗研究中心、實驗室、教師研究室");}
+                
+                else if (name === "N棟") {
+                    addImage("", "中正圖書館 \n 圖書館、閱覽室");}
+                
+                else if (name === "P棟") {
+                    addImage("", "雷德樓(教師研究一樓)教師研究室");}
+
+                else if (name === "Q棟") {
+                    addImage("Q.jpg", "教師研究室 - 平面圖");}
+               
+                else if (name === "R棟") {
+                    addImage("N/n1.jpg", "第一教學研究大樓 \n外語學院、英文學系、日本語文學系、德國文化學系、理學院、數學系、物理學系、事務組管理室、普仁堂、線上學習進行室、圖書館第二閱覽室、戴氏基金會會議室、教師研究室、R0108會議室、未來教室");}  
+
+                else if (name === "操場") {
+                    addImage("H/804.jpg", "操場位置圖");}
+
+                 else {
+                    addImage("Scu.png", "校園導覽總圖");}
+
+                // 點擊回饋樣式
+                menuItems.forEach(i => {
+                    i.style.color = "";
+                    i.style.fontWeight = "";
+                });
+                this.style.color = "#d32f2f";
+                this.style.fontWeight = "bold";
+                container.scrollTop = 0; // 重置捲軸位置
+            });
+        });
+
+        // 頁面載入預設顯示
+        addImage("Scu.png", "東吳大學校園地圖");
+    </script>
 </body>
 </html>
